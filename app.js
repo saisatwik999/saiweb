@@ -4,13 +4,16 @@ const https = require("https");
 
 const app = express();
 
-app.use(express.static(__dirname));
+/* ✅ Serve public folder correctly */
+app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+/* Home page */
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/signup.html");
 });
 
+/* Form submit */
 app.post("/", function (req, res) {
   const firstName = req.body.fName;
   const lastName = req.body.lName;
@@ -54,4 +57,5 @@ app.post("/", function (req, res) {
   request.end();
 });
 
+/* 🚀 Required for Vercel */
 module.exports = app;
