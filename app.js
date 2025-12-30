@@ -44,11 +44,11 @@ app.post("/", (req, res) => {
   };
 
   const request = https.request(url, options, (response) => {
-  if (response.statusCode === 200 || response.statusCode === 400) {
+  //if (response.statusCode === 200 || response.statusCode === 400) {
     res.sendFile(path.join(__dirname, "public", "success.html"));
-  } else {
-    res.sendFile(path.join(__dirname, "public", "failure.html"));
-  }
+ // } else {
+  //  res.sendFile(path.join(__dirname, "public", "failure.html"));
+ // }
 });
 
 
