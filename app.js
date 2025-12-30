@@ -4,7 +4,7 @@ const path = require("path");
 
 const app = express();
 
-/* Middleware */
+/* Serve static files */
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
@@ -28,10 +28,10 @@ app.post("/", (req, res) => {
         status: "subscribed",
         merge_fields: {
           FNAME: fName,
-          LNAME: lName,
-        },
-      },
-    ],
+          LNAME: lName
+        }
+      }
+    ]
   };
 
   const jsonData = JSON.stringify(data);
@@ -40,12 +40,10 @@ app.post("/", (req, res) => {
 
   const options = {
     method: "POST",
-    auth: "sai:" + process.env.MAILCHIMP_API_KEY,
+    auth: "sai:" + process.env.MAILCHIMP_API_KEY
   };
 
   const request = https.request(url, options, (response) => {
-    console.log("STATUS:", response.statusCode);
-
     if (response.statusCode >= 200 && response.statusCode < 300) {
       res.sendFile(path.join(__dirname, "public", "success.html"));
     } else {
