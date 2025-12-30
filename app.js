@@ -1,17 +1,16 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const https = require("https");
 const path = require("path");
 
 const app = express();
 
-/* Serve static files */
+/* Middleware */
 app.use(express.static(path.join(__dirname, "public")));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 /* Home page */
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "signup.html"));
+  res.sendFile(path.join(__dirname, "public", "signup.html"));
 });
 
 /* Form submit */
@@ -19,7 +18,7 @@ app.post("/", (req, res) => {
   const { fName, lName, email } = req.body;
 
   if (!email || !email.includes("@")) {
-    return res.sendFile(path.join(__dirname, "failure.html"));
+    return res.sendFile(path.join(__dirname, "public", "failure.html"));
   }
 
   const data = {
@@ -45,10 +44,12 @@ app.post("/", (req, res) => {
   };
 
   const request = https.request(url, options, (response) => {
-    if (response.statusCode === 200) {
-      res.sendFile(path.join(__dirname, "success.html"));
+    console.log("STATUS:", response.statusCode);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      res.sendFile(path.join(__dirname, "public", "success.html"));
     } else {
-      res.sendFile(path.join(__dirname, "failure.html"));
+      res.sendFile(path.join(__dirname, "public", "failure.html"));
     }
   });
 
@@ -56,5 +57,4 @@ app.post("/", (req, res) => {
   request.end();
 });
 
-/* Required for Vercel */
 module.exports = app;
