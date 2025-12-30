@@ -44,12 +44,13 @@ app.post("/", (req, res) => {
   };
 
   const request = https.request(url, options, (response) => {
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      res.sendFile(path.join(__dirname, "public", "success.html"));
-    } else {
-      res.sendFile(path.join(__dirname, "public", "failure.html"));
-    }
-  });
+  if (response.statusCode === 200 || response.statusCode === 400) {
+    res.sendFile(path.join(__dirname, "public", "success.html"));
+  } else {
+    res.sendFile(path.join(__dirname, "public", "failure.html"));
+  }
+});
+
 
   request.write(jsonData);
   request.end();
